@@ -1,5 +1,6 @@
 package com.codingshuttle.springboot;
 
+import com.codingshuttle.springboot.Bakary.CakeBake;
 import com.codingshuttle.springboot.Impl.SmsNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,6 +31,12 @@ public class SpringbootApplication implements CommandLineRunner {
 		SpringApplication.run(SpringbootApplication.class, args);
 	}
 
+	private CakeBake cakeBake;
+
+	public SpringbootApplication (CakeBake cakeBake){
+		this.cakeBake = cakeBake;
+	}
+
 	@Override
 	public void run(String... args) throws Exception {
 
@@ -40,6 +47,8 @@ public class SpringbootApplication implements CommandLineRunner {
 			System.out.println(notificationservice.getKey());
 			notificationservice.getValue().send("hello");
 		}
+
+		cakeBake.backCake();
 
 	}
 }
