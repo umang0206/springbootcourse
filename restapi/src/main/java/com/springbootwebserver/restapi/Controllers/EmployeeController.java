@@ -4,6 +4,7 @@ import com.springbootwebserver.restapi.dto.EmployeeDTO;
 import com.springbootwebserver.restapi.entity.EmployeeEntity;
 import com.springbootwebserver.restapi.repository.EmployeeRepository;
 import com.springbootwebserver.restapi.service.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody EmployeeDTO inputEmployee){
+    public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody @Valid EmployeeDTO inputEmployee){
 //        inputEmployee.setId(101L);
         EmployeeDTO savedEmployee  =  employeeService.save(inputEmployee);
         return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);

@@ -26,6 +26,9 @@ public class EmployeeEntity {
     @JsonProperty("isActive")
     private Boolean isActive;
 
+    private String role;
+    private Double salary;
+
     public void setId(Long employeeId) {
         this.id= employeeId;
     }
