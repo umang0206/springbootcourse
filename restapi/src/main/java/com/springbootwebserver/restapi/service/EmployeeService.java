@@ -2,8 +2,8 @@ package com.springbootwebserver.restapi.service;
 
 import com.springbootwebserver.restapi.dto.EmployeeDTO;
 import com.springbootwebserver.restapi.entity.EmployeeEntity;
+import com.springbootwebserver.restapi.exceptions.ResourceNotFoundException;
 import com.springbootwebserver.restapi.repository.EmployeeRepository;
-import org.apache.el.util.ReflectionUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
@@ -50,6 +50,7 @@ public class EmployeeService {
     }
 
     public EmployeeDTO updateEmployeeByID(Long employeeId, EmployeeDTO employeeDTO) {
+        isEmployeeExist(employeeId);
         EmployeeEntity employeeEntity = modelMapper.map(employeeDTO, EmployeeEntity.class);
         employeeEntity.setId(employeeId);
 //        employeeEntity.setIsActive(employeeDTO.getActive());
@@ -58,22 +59,19 @@ public class EmployeeService {
     }
 
 
-    public boolean isEmployeeExist(Long employeeId) {
-        return employeeRepository.existsById(employeeId);
+    public void isEmployeeExist(Long employeeId) {
+        boolean exist = employeeRepository.existsById(employeeId);
+        if(!exist) throw new ResourceNotFoundException("Employee id " + employeeId + " not found");
     }
     public Boolean deleteEmployeeById(Long employeeId) {
 
-            boolean exist = isEmployeeExist(employeeId);
-            if(!exist) return false;
+             isEmployeeExist(employeeId);
              employeeRepository.deleteById(employeeId);
-
              return true;
     }
 
     public EmployeeDTO updatePartialEmployeeByID(Long employeeId, Map<String, Object> updates) {
-        boolean exist = isEmployeeExist(employeeId);
-        if(!exist) return null;
-
+        isEmployeeExist(employeeId);
         EmployeeEntity employeeEntity = employeeRepository.findById(employeeId).get();
         updates.forEach((field, value) ->{
             Field fieldToBeUpdated = ReflectionUtils.findRequiredField(EmployeeEntity.class,field);
